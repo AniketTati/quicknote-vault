@@ -1,0 +1,7 @@
+# .gitignore
+# Ignore node_modules, logs, and other system files
+node_modules/
+logs/
+.DS_Store
+*.log
+.env

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuickNote Vault</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>QuickNote Vault</h1>
+  <button id="newNoteBtn">New Note</button>
+
+  <div id="newNoteSection" class="hidden">
+    <textarea id="noteContent" placeholder="Type your note here..."></textarea>
+    <button id="saveNoteBtn">Save Note</button>
+    <button id="cancelNoteBtn">Cancel</button>
+  </div>
+
+  <div class="notes" id="notesList"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
