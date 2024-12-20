@@ -9,6 +9,13 @@ QuickNote Vault is a simple Chrome extension for saving notes linked to the webs
 - Automatically track the web domain where notes are created.
 - Notes expire automatically after 30 days.
 
+## Planned Improvements
+- Improve UI to look a bit better.
+- Ability to edit the note.
+- Ability to view and edit expiry time while creating and viewing the note.
+- Showing domain name in a better way where notes were added.
+- Toggle mode to only show notes saved on that domain.
+
 ## Installation
 1. Clone this repository.
 2. Go to `chrome://extensions` in your browser.
