@@ -7,10 +7,13 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>QuickNote Vault</h1>
-  <button id="newNoteBtn">New Note</button>
+  <div class="header">
+    <h1>QuickNote Vault</h1>
+    <button id="newNoteBtn" class="add-button">+ Add</button>
+    <button id="settingsBtn" class="settings-button">⚙️</button>
+  </div>
 
-  <div id="newNoteSection" class="hidden">
+  <div id="newNoteSection" class="new-note hidden">
     <textarea id="noteContent" placeholder="Type your note here..."></textarea>
     <button id="saveNoteBtn">Save Note</button>
     <button id="cancelNoteBtn">Cancel</button>
