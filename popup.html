@@ -7,19 +7,23 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="header">
+  <header class="header">
     <h1>QuickNote Vault</h1>
-    <button id="newNoteBtn" class="add-button">+ Add</button>
-    <button id="settingsBtn" class="settings-button">⚙️</button>
-  </div>
+    <div class="header-buttons">
+      <button id="newNoteBtn" class="add-button" aria-label="Add new note">+ Add</button>
+      <button id="settingsBtn" class="settings-button" aria-label="Open settings">⚙️</button>
+    </div>
+  </header>
 
-  <div id="newNoteSection" class="new-note hidden">
-    <textarea id="noteContent" placeholder="Type your note here..."></textarea>
-    <button id="saveNoteBtn">Save Note</button>
-    <button id="cancelNoteBtn">Cancel</button>
-  </div>
+  <section id="newNoteSection" class="new-note hidden" role="form" aria-label="New note form">
+    <textarea id="noteContent" placeholder="Type your note here..." aria-label="Note content"></textarea>
+    <div class="button-group">
+      <button id="saveNoteBtn">Save Note</button>
+      <button id="cancelNoteBtn">Cancel</button>
+    </div>
+  </section>
 
-  <div class="notes" id="notesList"></div>
+  <main class="notes" id="notesList" role="main" aria-label="Notes list"></main>
 
   <script src="popup.js"></script>
 </body>

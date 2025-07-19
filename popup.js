@@ -73,28 +73,16 @@ function renderNotes() {
       // Create the note container
       const noteDiv = document.createElement('div');
       noteDiv.className = 'note';
-      noteDiv.style.border = '1px solid #ccc';
-      noteDiv.style.marginBottom = '10px';
-      noteDiv.style.borderRadius = '5px';
-      noteDiv.style.padding = '10px';
-      noteDiv.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.1)';
 
       // Create the note body
       const noteBody = document.createElement('div');
+      noteBody.className = 'note-body';
       noteBody.textContent = note.content;
-      noteBody.style.fontSize = '16px';
-      noteBody.style.marginBottom = '10px';
       noteDiv.appendChild(noteBody);
 
       // Create the footer
       const noteFooter = document.createElement('div');
-      noteFooter.style.display = 'flex';
-      noteFooter.style.justifyContent = 'space-between';
-      noteFooter.style.alignItems = 'center';
-      noteFooter.style.fontSize = '14px';
-      noteFooter.style.paddingTop = '5px';
-      noteFooter.style.borderTop = '1px solid #ddd';
-      noteFooter.style.color = daysRemaining <= 7 ? 'red' : '#333';
+      noteFooter.className = daysRemaining <= 7 ? 'note-footer expiring' : 'note-footer';
 
       const footerText = document.createElement('span');
       footerText.textContent = `${note.domain} | TTL: ${daysRemaining} days`;
@@ -103,11 +91,9 @@ function renderNotes() {
       // Add delete button - store the note's created timestamp as unique identifier
       const deleteBtn = document.createElement('button');
       deleteBtn.textContent = '🗑️';
-      deleteBtn.style.border = 'none';
-      deleteBtn.style.background = 'none';
-      deleteBtn.style.cursor = 'pointer';
-      deleteBtn.style.fontSize = '16px';
+      deleteBtn.className = 'note-button';
       deleteBtn.setAttribute('data-created', note.created);
+      deleteBtn.setAttribute('aria-label', 'Delete note');
       noteFooter.appendChild(deleteBtn);
 
       noteDiv.appendChild(noteFooter);
