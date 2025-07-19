@@ -32,8 +32,20 @@ saveNoteBtn.addEventListener('click', async () => {
   };
 
   chrome.storage.local.get({ notes: [] }, (result) => {
+    if (chrome.runtime.lastError) {
+      console.error('Error reading notes:', chrome.runtime.lastError);
+      alert('Failed to save note. Please try again.');
+      return;
+    }
+    
     const notes = [...result.notes, note];
     chrome.storage.local.set({ notes }, () => {
+      if (chrome.runtime.lastError) {
+        console.error('Error saving note:', chrome.runtime.lastError);
+        alert('Failed to save note. Please try again.');
+        return;
+      }
+      
       renderNotes();
       noteContent.value = '';
       newNoteSection.classList.add('hidden');
@@ -45,6 +57,12 @@ saveNoteBtn.addEventListener('click', async () => {
 // Render notes
 function renderNotes() {
   chrome.storage.local.get({ notes: [] }, (result) => {
+    if (chrome.runtime.lastError) {
+      console.error('Error reading notes:', chrome.runtime.lastError);
+      notesList.innerHTML = '<p>Error loading notes. Please refresh.</p>';
+      return;
+    }
+    
     notesList.innerHTML = '';
     const now = Date.now();
     const validNotes = result.notes.filter((note) => note.expiry > now);
@@ -82,14 +100,14 @@ function renderNotes() {
       footerText.textContent = `${note.domain} | TTL: ${daysRemaining} days`;
       noteFooter.appendChild(footerText);
 
-      // Add delete button
+      // Add delete button - store the note's created timestamp as unique identifier
       const deleteBtn = document.createElement('button');
       deleteBtn.textContent = '🗑️';
       deleteBtn.style.border = 'none';
       deleteBtn.style.background = 'none';
       deleteBtn.style.cursor = 'pointer';
       deleteBtn.style.fontSize = '16px';
-      deleteBtn.setAttribute('data-index', index);
+      deleteBtn.setAttribute('data-created', note.created);
       noteFooter.appendChild(deleteBtn);
 
       noteDiv.appendChild(noteFooter);
@@ -97,17 +115,35 @@ function renderNotes() {
     });
 
     // Save back valid notes (filtering out expired ones)
-    chrome.storage.local.set({ notes: validNotes });
+    chrome.storage.local.set({ notes: validNotes }, () => {
+      if (chrome.runtime.lastError) {
+        console.error('Error updating notes:', chrome.runtime.lastError);
+      }
+    });
   });
 }
 
 // Delete note
 notesList.addEventListener('click', (e) => {
   if (e.target.tagName === 'BUTTON') {
-    const index = e.target.getAttribute('data-index');
+    const createdTimestamp = e.target.getAttribute('data-created');
     chrome.storage.local.get({ notes: [] }, (result) => {
-      const notes = result.notes.filter((_, i) => i !== parseInt(index));
-      chrome.storage.local.set({ notes }, renderNotes);
+      if (chrome.runtime.lastError) {
+        console.error('Error reading notes for deletion:', chrome.runtime.lastError);
+        alert('Failed to delete note. Please try again.');
+        return;
+      }
+      
+      // Filter out the note with matching created timestamp
+      const notes = result.notes.filter((note) => note.created !== parseInt(createdTimestamp));
+      chrome.storage.local.set({ notes }, () => {
+        if (chrome.runtime.lastError) {
+          console.error('Error deleting note:', chrome.runtime.lastError);
+          alert('Failed to delete note. Please try again.');
+          return;
+        }
+        renderNotes();
+      });
     });
   }
 });
@@ -137,13 +173,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const content = `
       <h2>QuickNote Vault</h2>
-      <p><strong>Version:</strong> 1.0.0</p>
+      <p><strong>Version:</strong> 1.0</p>
       <p><strong>Features:</strong></p>
       <ul>
         <li>Quick note creation</li>
         <li>Auto-expiry after 30 days</li>
         <li>Domain tracking</li>
-        <li>Edit & Delete functionality</li>
+        <li>Delete functionality</li>
       </ul>
       <p><strong>Storage:</strong> Chrome Local Storage</p>
       <p><strong>Note Limit:</strong> Based on Chrome storage quota</p>
